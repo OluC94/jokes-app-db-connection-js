@@ -17,6 +17,25 @@ app.get("/jokes", async (req, res) => {
     res.json(dbResult.rows);
 });
 
+app.get("/jokes/:id", async (req, res) => {
+    const { id } = req.params;
+    const dbResult = "";
+});
+
+app.post("/jokes", async (req, res) => {
+    const { setup, punchline } = req.body;
+    const dbResult = await query(
+        "INSERT INTO jokes (setup, punchline) VALUES ($1, $2) returning *",
+        [setup, punchline]
+    );
+    if (dbResult.rowCount !== 1) {
+        res.status(500).json({ error: "there was not 1 row" });
+        return;
+    }
+
+    res.status(201).json({ outcome: "success" });
+});
+
 //just an example route handler.  delete it.
 app.get("/sum/:a/:b", handleGETRequestForSum);
 
