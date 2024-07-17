@@ -1,13 +1,11 @@
 import { app } from "./support/setupExpress.js";
 import { query } from "./support/db.js";
+import endpoints from "./endpoints.js";
 
 //You should delete all of these route handlers and replace them according to your own requirements
 
 app.get("/", (req, res) => {
-    res.json({
-        outcome: "success",
-        message: "currently working on jokes api",
-    });
+    res.json(endpoints);
 });
 
 app.get("/jokes", async (req, res) => {
