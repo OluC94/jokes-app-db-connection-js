@@ -8,8 +8,13 @@ import { setupARouteHandlerDemonstratingValidationWithZod } from "./zodDemo/setu
 app.get("/", (req, res) => {
     res.json({
         outcome: "success",
-        message: "hello world!  Try /sum/1/2 or /db-check",
+        message: "currently working on jokes api",
     });
+});
+
+app.get("/jokes", async (req, res) => {
+    const dbResult = await query("select * from jokes");
+    res.json(dbResult.rows);
 });
 
 //just an example route handler.  delete it.
