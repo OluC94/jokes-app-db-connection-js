@@ -19,7 +19,12 @@ app.get("/jokes", async (req, res) => {
 
 app.get("/jokes/:id", async (req, res) => {
     const { id } = req.params;
-    const dbResult = "";
+    const dbResult = await query("SELECT * FROM jokes WHERE id = $1", [id]);
+    if (dbResult.rowCount !== 1) {
+        res.status(404).json({ error: `joke with id ${id} not found` });
+        return;
+    }
+    res.json(dbResult.rows);
 });
 
 app.post("/jokes", async (req, res) => {
@@ -32,8 +37,20 @@ app.post("/jokes", async (req, res) => {
         res.status(500).json({ error: "there was not 1 row" });
         return;
     }
-
     res.status(201).json({ outcome: "success" });
+});
+
+app.delete("/jokes/:id", async (req, res) => {
+    const { id } = req.params;
+    const dbResult = await query(
+        "DELETE FROM jokes WHERE id = $1 returning *",
+        [id]
+    );
+    if (dbResult.rowCount !== 1) {
+        res.status(404).json({ error: `joke with id ${id} not found` });
+        return;
+    }
+    res.json({ outcome: "item successfully deleted" });
 });
 
 //just an example route handler.  delete it.
